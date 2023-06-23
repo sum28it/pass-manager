@@ -21,7 +21,8 @@ var users []User
 
 func Init() {
 	var err error
-	file, err = os.Create("pass.json")
+	os.Mkdir("files", 0644)
+	file, err = os.Create("files/pass.json")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -65,7 +66,7 @@ func Add(user *User) error {
 func read(mode int) error {
 
 	var err error
-	file, err = os.OpenFile("pass.json", mode, 0644)
+	file, err = os.OpenFile("files/pass.json", mode, 0644)
 	if err != nil {
 		return err
 	}
