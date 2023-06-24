@@ -7,7 +7,7 @@ import (
 	"fmt"
 
 	"github.com/spf13/cobra"
-	"github.com/sum28it/pass-manager/user"
+	"github.com/sum28it/pass-manager/pkg/user"
 )
 
 // addCmd represents the add command
@@ -20,6 +20,7 @@ and usage of using your command. For example:
 Cobra is a CLI library for Go that empowers applications.
 This application is a tool to generate the needed files
 to quickly create a Cobra application.`,
+	Args: cobra.ExactArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
 		u := &user.User{
 			App:         cmd.Flag("app").Value.String(),
@@ -28,7 +29,7 @@ to quickly create a Cobra application.`,
 			Password:    cmd.Flag("password").Value.String(),
 			Description: cmd.Flag("description").Value.String(),
 		}
-		err := user.Add(u)
+		err := user.Add(u, args[0])
 		if err != nil {
 			fmt.Println(err)
 		}

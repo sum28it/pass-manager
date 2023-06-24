@@ -7,7 +7,7 @@ import (
 	"fmt"
 
 	"github.com/spf13/cobra"
-	"github.com/sum28it/pass-manager/user"
+	"github.com/sum28it/pass-manager/pkg/user"
 )
 
 // getCmd represents the get command
@@ -20,16 +20,18 @@ and usage of using your command. For example:
 Cobra is a CLI library for Go that empowers applications.
 This application is a tool to generate the needed files
 to quickly create a Cobra application.`,
-	Args: cobra.RangeArgs(1, 2),
+	Args: cobra.ExactArgs(2),
 	Run: func(cmd *cobra.Command, args []string) {
 		// value, _ := cmd.Flags().GetBool("long")
 		// fmt.Println("get called", value, args)
+
 		u := &user.User{}
 		u.App = args[0]
-		u, err := user.Get(u)
+		u, err := user.Get(u, args[1])
 
 		if err != nil {
 			fmt.Println(err)
+			return
 		}
 		fmt.Println(*u)
 	},
