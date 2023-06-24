@@ -52,9 +52,6 @@ func Init(secret string) error {
 		salt = append(salt, byte(rand.Int()%256))
 	}
 
-	// Generate a new key from the secret and salt to be used for encryption
-	// key := pbkdf2.Key([]byte(secret), salt, 4096, 32, sha256.New)
-
 	h := sha256.New()
 	h.Write([]byte(secret))
 
@@ -81,6 +78,11 @@ func Get(user *User, secret string) (*User, error) {
 
 	for _, val := range users {
 		if user.App == val.App {
+
+			val.Password, err = decrypt(secret, val.Password)
+			if err != nil {
+				return nil, errors.New("error decrypting password")
+			}
 			return &val, nil
 		}
 	}
@@ -100,6 +102,14 @@ func Add(user *User, secret string) error {
 		if errors.Is(err, io.EOF) {
 			return err
 		}
+	}
+
+	// Encryption Here
+	user.Password, err = encrypt(secret, user.Password)
+
+	if err != nil {
+		fmt.Println(err)
+		return errors.New("error encrypting password")
 	}
 
 	users = append(users, *user)
