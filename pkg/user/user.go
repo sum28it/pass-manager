@@ -19,6 +19,7 @@ type User struct {
 	Email       string `json:"email"`
 	Password    string `json:"password"`
 	Description string `json:"description"`
+	ModifiedAt  string `json:"modifiedAt"`
 }
 
 var file *os.File
@@ -112,6 +113,8 @@ func Add(user *User, secret string) error {
 		return errors.New("error encrypting password")
 	}
 
+	now := time.Now()
+	user.ModifiedAt = fmt.Sprintf("%d-%d-%d %d:%d:%d", now.Day(), now.Month(), now.Year(), now.Hour(), now.Minute(), now.Second())
 	users = append(users, *user)
 	err = write()
 	if err != nil {
