@@ -29,6 +29,10 @@ var users []User
 // initializing application
 func Init(secret string) error {
 
+	if auth.IsInit() {
+		return errors.New("app already initialized")
+	}
+
 	var err error
 
 	// files directory holds the env file and passwords
@@ -101,7 +105,7 @@ func Add(user *User, secret string) error {
 	err := read(os.O_RDWR)
 	if err != nil {
 		if errors.Is(err, io.EOF) {
-			return err
+			return errors.New("error reading file")
 		}
 	}
 

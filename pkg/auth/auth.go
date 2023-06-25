@@ -11,6 +11,10 @@ import (
 
 func Authenticate(secret string) error {
 
+	if !IsInit() {
+		return errors.New("app not initialized")
+	}
+
 	err := godotenv.Load("files/.env")
 	if err != nil {
 		return errors.New("error loading .env file")

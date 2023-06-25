@@ -1,5 +1,5 @@
 /*
-Copyright © 2023 NAME HERE <EMAIL ADDRESS>
+Copyright © 2023 sum28it prasad28sumit@gmail.com
 */
 package cmd
 
@@ -13,13 +13,10 @@ import (
 // addCmd represents the add command
 var addCmd = &cobra.Command{
 	Use:   "add",
-	Short: "A brief description of your command",
-	Long: `A longer description that spans multiple lines and likely contains examples
-and usage of using your command. For example:
-
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
+	Short: "Used for adding a new user ",
+	Long: `This command is used to add a new user data. It has multiple flags, some of which 
+	are required and others are optional. This command takes a mandatory argument i.e the secret for
+	the application`,
 	Args: cobra.ExactArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
 		u := &user.User{
@@ -29,6 +26,12 @@ to quickly create a Cobra application.`,
 			Password:    cmd.Flag("password").Value.String(),
 			Description: cmd.Flag("description").Value.String(),
 		}
+
+		if len(args) < 1 {
+			fmt.Println("This command requires exactky one argument")
+			return
+		}
+
 		err := user.Add(u, args[0])
 		if err != nil {
 			fmt.Println(err)
@@ -51,7 +54,7 @@ func init() {
 	addCmd.Flags().StringP("app", "a", "", "App name (required)")
 	addCmd.Flags().StringP("userId", "u", "", "User ID")
 	addCmd.Flags().StringP("email", "e", "", "Email")
-	addCmd.Flags().StringP("password", "p", "", "Password")
+	addCmd.Flags().StringP("password", "p", "", "Password (required)")
 	addCmd.Flags().StringP("description", "d", "", "Description")
 
 	addCmd.MarkFlagRequired("app")

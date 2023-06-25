@@ -4,12 +4,12 @@ Copyright © 2023 NAME HERE <EMAIL ADDRESS>
 package cmd
 
 import (
-	"bufio"
 	"fmt"
 	"os"
 	"strings"
 
 	"github.com/spf13/cobra"
+	"github.com/sum28it/pass-manager/pkg/auth"
 )
 
 // resetCmd represents the reset command
@@ -22,21 +22,38 @@ and usage of using your command. For example:
 Cobra is a CLI library for Go that empowers applications.
 This application is a tool to generate the needed files
 to quickly create a Cobra application.`,
+	Args: cobra.ExactArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
-		input := bufio.NewScanner(os.Stdin)
-		fmt.Printf("This will remove all your data including any password that might be saved.\nAre you sure you want to do this? (Y/N)")
-		input.Scan()
-		choice := input.Text()
-		choice = strings.ToUpper(choice)
 
-		if choice == "N" {
+		if !auth.IsInit() {
+			fmt.Println("app not initialized")
+		}
+
+		// Authenticate user before resetting
+		err := auth.Authenticate(args[0])
+		if err != nil {
+			fmt.Println(err)
 			return
 		}
 
-		err := os.RemoveAll("files")
-		if err != nil {
-			fmt.Println("Unable to reset", err)
+		var choice string
+		fmt.Printf("This will remove all your data including any password that might be saved.\nAre you sure you want to do this? (Yes/No)")
+		fmt.Scanf("%s", &choice)
+		choice = strings.ToUpper(choice)
+
+		switch choice {
+		case "YES":
+			err := os.RemoveAll("files")
+			if err != nil {
+				fmt.Println("Unable to reset", err)
+			}
+		case "NO":
+			return
+
+		default:
+			fmt.Println("Invalid Input!")
 		}
+
 	},
 }
 
