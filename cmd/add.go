@@ -26,16 +26,12 @@ var addCmd = &cobra.Command{
 			Password:    cmd.Flag("password").Value.String(),
 			Description: cmd.Flag("description").Value.String(),
 		}
-
-		if len(args) < 1 {
-			fmt.Println("This command requires exactky one argument")
-			return
-		}
-
 		err := user.Add(u, args[0])
 		if err != nil {
 			fmt.Println(err)
+			return
 		}
+		fmt.Println("User Added!")
 	},
 }
 

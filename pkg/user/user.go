@@ -134,8 +134,8 @@ func Add(user *User, secret string) error {
 		return errors.New("error encrypting password")
 	}
 
-	now := time.Now()
-	user.ModifiedAt = fmt.Sprintf("%d-%d-%d %d:%d:%d", now.Day(), now.Month(), now.Year(), now.Hour(), now.Minute(), now.Second())
+	now := time.Now().Format("2006-01-02 15:04:05")
+	user.ModifiedAt = now
 	users = append(users, *user)
 	err = write()
 	if err != nil {
