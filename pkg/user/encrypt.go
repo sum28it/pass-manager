@@ -16,7 +16,7 @@ func encrypt(secret string, text string) (string, error) {
 
 	// Generating encryption key from secret and salt
 
-	err := godotenv.Load("files/.env")
+	err := godotenv.Load(Dir + localDir + envFile)
 	if err != nil {
 		return "", errors.New("error loading env file")
 	}

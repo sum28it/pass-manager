@@ -4,6 +4,8 @@ Copyright © 2023 sum28it prasad28sumit@gmail.com
 package cmd
 
 import (
+	"fmt"
+
 	"github.com/spf13/cobra"
 	"github.com/sum28it/pass-manager/pkg/user"
 )
@@ -17,7 +19,12 @@ var initCmd = &cobra.Command{
 	Args: cobra.ExactArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
 
-		user.Init(args[0])
+		dir, err := user.Init(args[0])
+		if err != nil {
+			fmt.Println(err)
+		} else {
+			fmt.Println("Data is stored at: ", dir)
+		}
 	},
 }
 

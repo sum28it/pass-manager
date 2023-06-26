@@ -1,3 +1,5 @@
+// Package auth provides functionality to authenticate users
+
 package auth
 
 import (
@@ -9,13 +11,14 @@ import (
 	"github.com/joho/godotenv"
 )
 
-func Authenticate(secret string) error {
+func Authenticate(secret string, filename string) error {
 
-	if !IsInit() {
+	// Check if app is initialized
+	if !IsInit(filename) {
 		return errors.New("app not initialized")
 	}
 
-	err := godotenv.Load("files/.env")
+	err := godotenv.Load(filename)
 	if err != nil {
 		return errors.New("error loading .env file")
 	}
@@ -24,8 +27,8 @@ func Authenticate(secret string) error {
 	h.Write([]byte(secret))
 	genHashedSecret := fmt.Sprintf("%x", string(h.Sum(nil)))
 
-	fmt.Printf("%s\n", hashedSecret)
-	fmt.Printf("%s\n", genHashedSecret)
+	// fmt.Printf("%s\n", hashedSecret)
+	// fmt.Printf("%s\n", genHashedSecret)
 	if string(hashedSecret) != string(genHashedSecret) {
 		return errors.New("incorrect secret")
 	}

@@ -1,9 +1,11 @@
 package auth
 
-import "os"
+import (
+	"os"
+)
 
-func IsInit() bool {
+func IsInit(filename string) bool {
 
-	_, err := os.Stat("file/.env")
+	_, err := os.Stat(filename)
 	return err == nil
 }

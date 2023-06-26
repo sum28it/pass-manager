@@ -15,7 +15,7 @@ import (
 
 func decrypt(secret string, text string) (string, error) {
 
-	err := godotenv.Load("files/.env")
+	err := godotenv.Load(Dir + localDir + envFile)
 	if err != nil {
 		return "", errors.New("error loading env file")
 	}

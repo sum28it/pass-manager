@@ -5,11 +5,10 @@ package cmd
 
 import (
 	"fmt"
-	"os"
 	"strings"
 
 	"github.com/spf13/cobra"
-	"github.com/sum28it/pass-manager/pkg/auth"
+	"github.com/sum28it/pass-manager/pkg/user"
 )
 
 // resetCmd represents the reset command
@@ -25,17 +24,6 @@ to quickly create a Cobra application.`,
 	Args: cobra.ExactArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
 
-		if !auth.IsInit() {
-			fmt.Println("app not initialized")
-		}
-
-		// Authenticate user before resetting
-		err := auth.Authenticate(args[0])
-		if err != nil {
-			fmt.Println(err)
-			return
-		}
-
 		var choice string
 		fmt.Printf("This will remove all your data including any password that might be saved.\nAre you sure you want to do this? (Yes/No)")
 		fmt.Scanf("%s", &choice)
@@ -43,17 +31,18 @@ to quickly create a Cobra application.`,
 
 		switch choice {
 		case "YES":
-			err := os.RemoveAll("files")
+			err := user.Reset(args[0])
 			if err != nil {
-				fmt.Println("Unable to reset", err)
+				fmt.Println(err)
+				return
 			}
+			fmt.Println("Your application has been successsfully reset.\nUse init command again before adding users.")
 		case "NO":
 			return
 
 		default:
 			fmt.Println("Invalid Input!")
 		}
-
 	},
 }
 

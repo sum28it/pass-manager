@@ -25,29 +25,41 @@ type User struct {
 var file *os.File
 var users []User
 
+var (
+	Dir string = "C:\\users\\user\\"
+)
+
+const (
+	localDir string = "password-manager-data\\"
+	dataFile string = "users.json"
+	envFile  string = "keys.env"
+)
+
 // ===========================================================================================
 // initializing application
-func Init(secret string) error {
+func Init(secret string) (string, error) {
 
-	if auth.IsInit() {
-		return errors.New("app already initialized")
+	// Check if app is already initialized
+	if auth.IsInit(Dir + localDir + envFile) {
+		return "", errors.New("app already initialized")
 	}
-
 	var err error
 
 	// files directory holds the env file and passwords
-	os.Mkdir("files", 0644)
-
-	// Creating pass.json and .env files
-	file, err = os.Create("files/pass.json")
+	err = os.Mkdir(Dir+localDir, 0644)
 	if err != nil {
-		return err
+		return "", err
+	}
+	// Creating pass.json and .env files
+	file, err = os.Create(Dir + localDir + dataFile)
+	if err != nil {
+		return "", err
 	}
 	file.Close()
 	// .env file holds the user secret and salt
-	file, err = os.Create("files/.env")
+	file, err = os.Create(Dir + localDir + envFile)
 	if err != nil {
-		return err
+		return "", err
 	}
 
 	// Creating a salt to append with passwords
@@ -63,21 +75,25 @@ func Init(secret string) error {
 	// Write the salt and
 	file.WriteString(fmt.Sprintf("SALT=%x\n", string(salt)))
 	file.WriteString(fmt.Sprintf("HASHED_SECRET=%x", string(h.Sum(nil))))
+	file.Close()
 
-	return nil
+	return Dir + localDir, nil
 }
 
 // ==========================================================================================
 // Returns user data matching to user
 func Get(user *User, secret string) (*User, error) {
 
-	if err := auth.Authenticate(secret); err != nil {
+	if err := auth.Authenticate(secret, Dir+localDir+envFile); err != nil {
 		return nil, err
 	}
 
 	defer file.Close()
 	err := read(os.O_RDONLY)
 	if err != nil {
+		if !errors.Is(err, io.EOF) {
+			return nil, errors.New("no user exists. need to add a user first")
+		}
 		return nil, err
 	}
 
@@ -98,7 +114,8 @@ func Get(user *User, secret string) (*User, error) {
 
 func Add(user *User, secret string) error {
 
-	if err := auth.Authenticate(secret); err != nil {
+	defer file.Close()
+	if err := auth.Authenticate(secret, Dir+localDir+envFile); err != nil {
 		return err
 	}
 
@@ -131,7 +148,7 @@ func Add(user *User, secret string) error {
 func read(mode int) error {
 
 	var err error
-	file, err = os.OpenFile("files/pass.json", mode, 0644)
+	file, err = os.OpenFile(Dir+localDir+dataFile, mode, 0644)
 	if err != nil {
 		return err
 	}
@@ -162,5 +179,20 @@ func write() error {
 		return err
 	}
 
+	return nil
+}
+
+func Reset(secret string) error {
+
+	// Authenticate user before resetting
+	err := auth.Authenticate(secret, Dir+localDir+envFile)
+	if err != nil {
+		return err
+	}
+
+	err = os.RemoveAll(Dir + localDir)
+	if err != nil {
+		return errors.New("error deleting files")
+	}
 	return nil
 }
