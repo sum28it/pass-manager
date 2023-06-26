@@ -98,7 +98,7 @@ func Get(user *User, secret string) (*User, error) {
 	}
 
 	for _, val := range users {
-		if user.App == val.App {
+		if user.match(&val) {
 
 			val.Password, err = decrypt(secret, val.Password)
 			if err != nil {
@@ -195,4 +195,19 @@ func Reset(secret string) error {
 		return errors.New("error deleting files")
 	}
 	return nil
+}
+
+func (u *User) match(user *User) bool {
+
+	if (u.App != "") && (u.App != user.App) {
+		return false
+	}
+	if (u.Email != "") && (u.Email != user.Email) {
+		return false
+	}
+	if (u.UserId != "") && (u.UserId != user.UserId) {
+		return false
+	}
+
+	return true
 }

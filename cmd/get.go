@@ -16,14 +16,17 @@ var getCmd = &cobra.Command{
 	Short: "Retrieve user data",
 	Long: `Thsi command is used to retrieve usert data. It takes two arguments. 
 	First is the name of the app you want to get and second is your secret.`,
-	Args: cobra.ExactArgs(2),
+	Args: cobra.ExactArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
 		// value, _ := cmd.Flags().GetBool("long")
 		// fmt.Println("get called", value, args)
 
-		u := &user.User{}
-		u.App = args[0]
-		u, err := user.Get(u, args[1])
+		u := &user.User{
+			App:    cmd.Flag("app").Value.String(),
+			Email:  cmd.Flag("email").Value.String(),
+			UserId: cmd.Flag("userId").Value.String(),
+		}
+		u, err := user.Get(u, args[0])
 
 		if err != nil {
 			fmt.Println(err)
@@ -46,4 +49,8 @@ func init() {
 	// getCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 
 	getCmd.Flags().BoolP("long", "l", false, "Print user info in long format")
+	getCmd.Flags().StringP("app", "a", "", "App name")
+	getCmd.Flags().StringP("email", "e", "", "Email")
+	getCmd.Flags().StringP("userId", "u", "", "User ID")
+
 }
