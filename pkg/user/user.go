@@ -23,7 +23,6 @@ type User struct {
 }
 
 var file *os.File
-var users []User
 
 var (
 	Dir string = "C:\\users\\user\\"
@@ -79,47 +78,15 @@ func Init(secret string) (string, error) {
 
 	return Dir + localDir, nil
 }
-
-// ==========================================================================================
-// Returns user data matching to user
-func Get(user *User, secret string) (*User, error) {
-
-	if err := auth.Authenticate(secret, Dir+localDir+envFile); err != nil {
-		return nil, err
-	}
-
-	defer file.Close()
-	err := read(os.O_RDONLY)
-	if err != nil {
-		if !errors.Is(err, io.EOF) {
-			return nil, errors.New("no user exists. need to add a user first")
-		}
-		return nil, err
-	}
-
-	for _, val := range users {
-		if user.match(&val) {
-
-			val.Password, err = decrypt(secret, val.Password)
-			if err != nil {
-				return nil, errors.New("error decrypting password")
-			}
-			return &val, nil
-		}
-	}
-
-	return nil, errors.New("no such user exists")
-
-}
-
 func Add(user *User, secret string) error {
 
+	var users []User
 	defer file.Close()
 	if err := auth.Authenticate(secret, Dir+localDir+envFile); err != nil {
 		return err
 	}
 
-	err := read(os.O_RDWR)
+	users, err := read(os.O_RDWR)
 	if err != nil {
 		if errors.Is(err, io.EOF) {
 			return errors.New("error reading file")
@@ -137,7 +104,7 @@ func Add(user *User, secret string) error {
 	now := time.Now().Format("2006-01-02 15:04:05")
 	user.ModifiedAt = now
 	users = append(users, *user)
-	err = write()
+	err = write(users)
 	if err != nil {
 		return err
 	}
@@ -145,29 +112,30 @@ func Add(user *User, secret string) error {
 }
 
 // Reads the users from the file
-func read(mode int) error {
+func read(mode int) ([]User, error) {
 
 	var err error
 	file, err = os.OpenFile(Dir+localDir+dataFile, mode, 0644)
 	if err != nil {
-		return err
+		return nil, err
 	}
 
 	data, err := io.ReadAll(file)
 	if err != nil {
-		return err
+		return nil, err
 	}
+	var users []User
 	err = json.Unmarshal(data, &users)
 
 	if err != nil {
-		return err
+		return nil, err
 	}
 
-	return nil
+	return users, nil
 }
 
 // Writing a new user data to file
-func write() error {
+func write(users []User) error {
 	data, err := json.Marshal(users)
 	if err != nil {
 		return err
@@ -197,7 +165,7 @@ func Reset(secret string) error {
 	return nil
 }
 
-func (u *User) match(user *User) bool {
+func (u *User) match(user User) bool {
 
 	if (u.App != "") && (u.App != user.App) {
 		return false
