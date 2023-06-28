@@ -19,7 +19,7 @@ var addCmd = &cobra.Command{
 	the application`,
 	Args: cobra.ExactArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
-		u := &user.User{
+		u := user.User{
 			App:         cmd.Flag("app").Value.String(),
 			UserId:      cmd.Flag("userId").Value.String(),
 			Email:       cmd.Flag("email").Value.String(),

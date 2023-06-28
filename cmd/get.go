@@ -21,7 +21,7 @@ var getCmd = &cobra.Command{
 		// value, _ := cmd.Flags().GetBool("long")
 		// fmt.Println("get called", value, args)
 
-		u := &user.User{
+		u := user.User{
 			App:    cmd.Flag("app").Value.String(),
 			Email:  cmd.Flag("email").Value.String(),
 			UserId: cmd.Flag("userId").Value.String(),

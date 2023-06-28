@@ -37,9 +37,6 @@ to quickly create a Cobra application.`,
 				return
 			}
 			fmt.Println("Your application has been successsfully reset.\nUse init command again before adding users.")
-		case "NO":
-			return
-
 		default:
 			fmt.Println("Invalid Input!")
 		}

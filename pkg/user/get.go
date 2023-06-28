@@ -9,16 +9,14 @@ import (
 )
 
 // Returns user data matching to user
-func Get(user *User, secret string) ([]User, error) {
+func Get(user User, secret string) ([]User, error) {
 
 	// Authentication
 	if err := auth.Authenticate(secret, Dir+localDir+envFile); err != nil {
 		return nil, err
 	}
-
-	var users []User
 	// Read data from file
-	defer file.Close()
+	var users []User
 	users, err := read(os.O_RDONLY)
 	if err != nil {
 		if !errors.Is(err, io.EOF) {

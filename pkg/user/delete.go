@@ -7,44 +7,49 @@ import (
 	"github.com/sum28it/pass-manager/pkg/auth"
 )
 
-func Delete(user *User, secret string, force bool) error {
+func Delete(user User, secret string, force bool) ([]User, error) {
+
+	var users []User
 
 	// Authenticate user
 	err := auth.Authenticate(secret, Dir+localDir+envFile)
 	if err != nil {
-		return err
+		return nil, err
 	}
 
 	// Filter users
-	var users []User
 	users, err = read(os.O_RDWR)
 	if err != nil {
-		return err
+		return nil, err
 	}
-	filtered := filter(user, users)
-	if len(filtered) == len(users) {
-		return errors.New("no such user exists")
+	filtered, matched := filter(user, users)
+	if len(matched) == 0 {
+		return nil, errors.New("no such user exists")
 	}
 
-	if len(users)-len(filtered) > 1 && !force {
-		return errors.New("more than one such user found")
+	if len(matched) > 1 && !force {
+		return users, nil
 	}
 	err = write(filtered)
 	if err != nil {
-		return err
+		return matched, err
 	}
-	return nil
+	return matched, nil
 
 }
 
-func filter(u *User, users []User) []User {
-	var result []User
+// Filters all users matching to u in the slice
+func filter(u User, users []User) ([]User, []User) {
+	var filtered []User
+	var matched []User
 
 	for _, val := range users {
 		if !u.match(val) {
-			result = append(result, val)
+			filtered = append(filtered, val)
+		} else {
+			matched = append(matched, val)
 		}
 	}
-	return result
+	return filtered, matched
 
 }

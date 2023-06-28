@@ -25,25 +25,28 @@ to quickly create a Cobra application.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Println("delete called")
 
-		u := &user.User{
+		u := user.User{
 			App:    cmd.Flag("app").Value.String(),
 			Email:  cmd.Flag("email").Value.String(),
 			UserId: cmd.Flag("userId").Value.String(),
 		}
-		err := user.Delete(u, args[0], false)
-		if err != nil && err.Error() == "more than one such user found" {
+		var users []user.User
+		users, err := user.Delete(u, args[0], false)
+		if err != nil {
+			fmt.Println(err)
+			return
+		}
+		if len(users) > 1 {
 			var choice string
-			fmt.Println(err.Error(), "Do you want to continue?")
+			fmt.Println("More than one such user exists", "Do you want to delete all(Yes/No)?")
+			fmt.Println(users)
 			fmt.Scanf("%s", &choice)
 			choice = strings.ToUpper(choice)
 			if choice == "YES" {
 				user.Delete(u, args[0], true)
 			}
-		} else if err != nil {
-			fmt.Println(err)
-			return
 		}
-		fmt.Println("Deleted")
+		fmt.Println("Deleted: ", users)
 	},
 }
 
