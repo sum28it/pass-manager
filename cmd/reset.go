@@ -21,7 +21,7 @@ WARNING: [All your data will be lost]`,
 	Run: func(cmd *cobra.Command, args []string) {
 
 		var choice string
-		fmt.Printf("This will remove all your data including any password that might be saved.\nAre you sure you want to do this? (Yes/No)")
+		fmt.Println("This will remove all your data including any password that might be saved.\nAre you sure you want to do this? (Yes/No)")
 		fmt.Scanf("%s", &choice)
 		choice = strings.ToUpper(choice)
 

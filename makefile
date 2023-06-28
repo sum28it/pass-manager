@@ -22,5 +22,7 @@ test:
 reset: 
 	pass-manager reset secret
 
-build:
-	go build
+build-win-amd64:
+	set GOOS=windows
+	set GOARCH=amd64
+	go build -o bin/passm.exe
