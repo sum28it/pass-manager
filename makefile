@@ -21,3 +21,6 @@ test:
 
 reset: 
 	pass-manager reset secret
+
+build:
+	go build

@@ -1,5 +1,5 @@
 /*
-Copyright © 2023 NAME HERE <EMAIL ADDRESS>
+Copyright © 2023 sum28it prasad28sumit@gmail.com
 */
 package cmd
 
@@ -14,8 +14,8 @@ import (
 var getCmd = &cobra.Command{
 	Use:   "get",
 	Short: "Retrieve user data",
-	Long: `This command is used to retrieve user data. It takes an argument secret and 
-	supports four flags.`,
+	Long: `This command is used to retrieve app data. It takes an argument secret and flags for specifying the 
+details of queried app.`,
 	Args: cobra.ExactArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
 		// value, _ := cmd.Flags().GetBool("long")
@@ -32,8 +32,13 @@ var getCmd = &cobra.Command{
 			fmt.Println(err)
 			return
 		}
+		verbose, _ := cmd.Flags().GetBool("verbose")
 		for _, u := range result {
-			fmt.Println(u)
+			if verbose {
+				fmt.Println(u.PrintLong())
+			} else {
+				fmt.Println(u.Print())
+			}
 		}
 	},
 }
@@ -50,7 +55,7 @@ func init() {
 	// is called directly, e.g.:
 	// getCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 
-	getCmd.Flags().BoolP("long", "l", false, "Print user info in long format")
+	getCmd.Flags().BoolP("verbose", "v", false, "Print user info in verbose mode")
 	getCmd.Flags().StringP("app", "a", "", "Get App")
 	getCmd.Flags().StringP("email", "e", "", "Email get")
 	getCmd.Flags().StringP("userId", "u", "", "User ID")

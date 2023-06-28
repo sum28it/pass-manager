@@ -27,8 +27,6 @@ func Authenticate(secret string, filename string) error {
 	h.Write([]byte(secret))
 	genHashedSecret := fmt.Sprintf("%x", string(h.Sum(nil)))
 
-	// fmt.Printf("%s\n", hashedSecret)
-	// fmt.Printf("%s\n", genHashedSecret)
 	if string(hashedSecret) != string(genHashedSecret) {
 		return errors.New("incorrect secret")
 	}

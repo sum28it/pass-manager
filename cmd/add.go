@@ -15,8 +15,8 @@ var addCmd = &cobra.Command{
 	Use:   "add",
 	Short: "Used for adding a new user ",
 	Long: `This command is used to add a new user data. It has multiple flags, some of which 
-	are required and others are optional. This command takes a mandatory argument i.e the secret for
-	the application`,
+are required and others are optional. This command takes a mandatory argument i.e the secret for
+the application`,
 	Args: cobra.ExactArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
 		u := user.User{

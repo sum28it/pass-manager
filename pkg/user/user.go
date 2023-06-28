@@ -1,3 +1,5 @@
+// Package user defines the user type and provides access to the stored data
+
 package user
 
 import (
@@ -20,7 +22,7 @@ type User struct {
 var Dir string
 
 func init() {
-	Dir, _ = os.UserHomeDir()
+	Dir, _ = os.UserConfigDir()
 	Dir = Dir + "\\"
 }
 
@@ -30,8 +32,12 @@ const (
 	envFile  string = "keys.env"
 )
 
-func (u User) String() string {
-	return fmt.Sprintf("App: %s\tuserId: %s\tEmail: %s\n", u.App, u.UserId, u.Email)
+func (u User) PrintLong() string {
+	return fmt.Sprintf("{\nApp: %s\nUserId: %s\nEmail: %s\nPassword: %s\nDescription: %s\nModifiedAt: %s\n}", u.App, u.UserId, u.Email, u.Password, u.Description, u.ModifiedAt)
+}
+
+func (u User) Print() string {
+	return fmt.Sprintf("App: %s\tPassword: %s", u.App, u.Password)
 }
 
 // Reads the users from the file

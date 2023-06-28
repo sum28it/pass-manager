@@ -1,5 +1,5 @@
 /*
-Copyright © 2023 NAME HERE <EMAIL ADDRESS>
+Copyright © 2023 sum28it prasad28sumit@gmail.com
 */
 package cmd
 
@@ -14,13 +14,9 @@ import (
 // resetCmd represents the reset command
 var resetCmd = &cobra.Command{
 	Use:   "reset",
-	Short: "A brief description of your command",
-	Long: `A longer description that spans multiple lines and likely contains examples
-and usage of using your command. For example:
-
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
+	Short: "Resets the application",
+	Long: `This command resets the application and deletes all the app data. It takes the secret as an argument.
+WARNING: [All your data will be lost]`,
 	Args: cobra.ExactArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
 

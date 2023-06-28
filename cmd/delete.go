@@ -1,5 +1,5 @@
 /*
-Copyright © 2023 NAME HERE <EMAIL ADDRESS>
+Copyright © 2023 sum28it prasad28sumit@gmail.com
 */
 package cmd
 
@@ -14,16 +14,11 @@ import (
 // deleteCmd represents the delete command
 var deleteCmd = &cobra.Command{
 	Use:   "delete",
-	Short: "A brief description of your command",
-	Long: `A longer description that spans multiple lines and likely contains examples
-and usage of using your command. For example:
-
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
+	Short: "Deletes one or more user data",
+	Long: `This command is for deleting one or more app data. It takes an argument secret and has flags for specifying 
+	the app data to be deleted`,
 	Args: cobra.ExactArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("delete called")
 
 		u := user.User{
 			App:    cmd.Flag("app").Value.String(),
@@ -38,15 +33,17 @@ to quickly create a Cobra application.`,
 		}
 		if len(users) > 1 {
 			var choice string
+			for _, u := range users {
+				fmt.Println(u.Print())
+			}
 			fmt.Println("More than one such user exists", "Do you want to delete all(Yes/No)?")
-			fmt.Println(users)
 			fmt.Scanf("%s", &choice)
 			choice = strings.ToUpper(choice)
 			if choice == "YES" {
 				user.Delete(u, args[0], true)
 			}
 		}
-		fmt.Println("Deleted: ", users)
+		fmt.Println("Deleted!")
 	},
 }
 
