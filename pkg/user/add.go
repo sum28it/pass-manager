@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io"
 	"os"
+	"path/filepath"
 	"time"
 
 	"github.com/sum28it/pass-manager/pkg/auth"
@@ -12,7 +13,7 @@ import (
 
 func Add(user User, secret string) error {
 
-	if err := auth.Authenticate(secret, Dir+localDir+envFile); err != nil {
+	if err := auth.Authenticate(secret, filepath.Join(Dir, localDir, envFile)); err != nil {
 		return err
 	}
 

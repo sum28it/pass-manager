@@ -2,6 +2,7 @@ package user
 
 import (
 	"fmt"
+	"path/filepath"
 
 	"github.com/sum28it/pass-manager/pkg/auth"
 )
@@ -9,10 +10,10 @@ import (
 // Returns info about the application data storage
 func Info() string {
 
-	if !auth.IsInit(Dir + localDir + envFile) {
+	if !auth.IsInit(filepath.Join(Dir, localDir, envFile)) {
 		return fmt.Sprintf("The app is not initialized. After initialization, the data will be stored at %s in %s", Dir, localDir)
 	}
 
-	return Dir + localDir
+	return filepath.Join(Dir, localDir)
 
 }

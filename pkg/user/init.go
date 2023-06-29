@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"math/rand"
 	"os"
+	"path/filepath"
 	"time"
 
 	"github.com/sum28it/pass-manager/pkg/auth"
@@ -14,24 +15,24 @@ import (
 func Init(secret string) (string, error) {
 
 	// Check if app is already initialized
-	if auth.IsInit(Dir + localDir + envFile) {
+	if auth.IsInit(filepath.Join(Dir, localDir, envFile)) {
 		return "", errors.New("app already initialized")
 	}
 	var err error
 
 	// Directory holds the env file and passwords
-	err = os.Mkdir(Dir+localDir, 0644)
+	err = os.Mkdir(filepath.Join(Dir, localDir), 0644)
 	if err != nil {
 		return "", err
 	}
 	// Creating pass.json and .env files
-	file, err := os.Create(Dir + localDir + dataFile)
+	file, err := os.Create(filepath.Join(Dir, localDir, dataFile))
 	if err != nil {
 		return "", err
 	}
 	file.Close()
 	// .env file holds the user secret and salt
-	file, err = os.Create(Dir + localDir + envFile)
+	file, err = os.Create(filepath.Join(Dir, localDir, envFile))
 	if err != nil {
 		return "", err
 	}
@@ -51,5 +52,5 @@ func Init(secret string) (string, error) {
 	file.WriteString(fmt.Sprintf("HASHED_SECRET=%x", string(h.Sum(nil))))
 	file.Close()
 
-	return Dir + localDir, nil
+	return filepath.Join(Dir, localDir), nil
 }

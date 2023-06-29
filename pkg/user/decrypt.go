@@ -8,6 +8,7 @@ import (
 	"errors"
 	"fmt"
 	"os"
+	"path/filepath"
 
 	"github.com/joho/godotenv"
 	"golang.org/x/crypto/pbkdf2"
@@ -15,7 +16,7 @@ import (
 
 func decrypt(secret string, text string) (string, error) {
 
-	err := godotenv.Load(Dir + localDir + envFile)
+	err := godotenv.Load(filepath.Join(Dir, localDir, envFile))
 	if err != nil {
 		return "", errors.New("error loading env file")
 	}

@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"io"
 	"os"
+	"path/filepath"
 )
 
 //CURRENT TASK: Refactor to support linux path names
@@ -25,11 +26,10 @@ var Dir string
 
 func init() {
 	Dir, _ = os.UserConfigDir()
-	Dir = Dir + "\\"
 }
 
 const (
-	localDir string = "password-manager-data\\"
+	localDir string = "password-manager-data"
 	dataFile string = "users.json"
 	envFile  string = "keys.env"
 )
@@ -47,7 +47,7 @@ func read(mode int) ([]User, error) {
 
 	var file *os.File
 	var err error
-	file, err = os.OpenFile(Dir+localDir+dataFile, mode, 0644)
+	file, err = os.OpenFile(filepath.Join(Dir, localDir, dataFile), mode, 0644)
 	if err != nil {
 		return nil, err
 	}
@@ -74,7 +74,7 @@ func write(users []User) error {
 	if err != nil {
 		return err
 	}
-	file, err := os.OpenFile(Dir+localDir+dataFile, os.O_WRONLY, 0644)
+	file, err := os.OpenFile(filepath.Join(Dir, localDir, dataFile), os.O_WRONLY, 0644)
 	if err != nil {
 		return errors.New("error opening file for writing")
 	}

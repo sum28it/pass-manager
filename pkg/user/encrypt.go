@@ -7,6 +7,7 @@ import (
 	"encoding/hex"
 	"errors"
 	"os"
+	"path/filepath"
 
 	"github.com/joho/godotenv"
 	"golang.org/x/crypto/pbkdf2"
@@ -16,7 +17,7 @@ func encrypt(secret string, text string) (string, error) {
 
 	// Generating encryption key from secret and salt
 
-	err := godotenv.Load(Dir + localDir + envFile)
+	err := godotenv.Load(filepath.Join(Dir, localDir, envFile))
 	if err != nil {
 		return "", errors.New("error loading env file")
 	}

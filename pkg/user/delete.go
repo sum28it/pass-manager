@@ -3,6 +3,7 @@ package user
 import (
 	"errors"
 	"os"
+	"path/filepath"
 
 	"github.com/sum28it/pass-manager/pkg/auth"
 )
@@ -12,7 +13,7 @@ func Delete(user User, secret string, force bool) ([]User, error) {
 	var users []User
 
 	// Authenticate user
-	err := auth.Authenticate(secret, Dir+localDir+envFile)
+	err := auth.Authenticate(secret, filepath.Join(Dir, localDir, envFile))
 	if err != nil {
 		return nil, err
 	}

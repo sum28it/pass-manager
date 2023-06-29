@@ -4,6 +4,7 @@ import (
 	"errors"
 	"io"
 	"os"
+	"path/filepath"
 
 	"github.com/sum28it/pass-manager/pkg/auth"
 )
@@ -12,7 +13,7 @@ import (
 func Get(user User, secret string) ([]User, error) {
 
 	// Authentication
-	if err := auth.Authenticate(secret, Dir+localDir+envFile); err != nil {
+	if err := auth.Authenticate(secret, filepath.Join(Dir, localDir, envFile)); err != nil {
 		return nil, err
 	}
 	// Read data from file
