@@ -1,6 +1,6 @@
 install:
 	set CGO_ENABLED=0 
-	go install -ldflags "-X github.com/sum28it/pass-manager/pkg/user.Dir=C:\\users\\user\\Downloads\\" .
+	go install .
 
 push:
 	git push -u origin main
@@ -25,9 +25,25 @@ reset:
 build-win-amd64:
 	set GOOS=windows
 	set GOARCH=amd64
-	go build -o bin/passm.exe
+	go build -o bin/passm-win-amd64.exe
 
 build-linux-amd64:
 	set GOOS=linux
 	set GOARCH=amd64
 	go build -o bin/passm-linux-amd64.exe
+
+build-win-arm:
+	set GOOS=windows
+	set GOARCH=arm
+	go build -o bin/passm-win-arm.exe
+
+build-linux-arm:
+	set GOOS=linux
+	set GOARCH=arm
+	go build -o bin/passm-linux-arm.exe
+
+build-all:
+	make build-win-amd64
+	make build-win-arm
+	make build-linux-amd64
+	make build-linux-arm

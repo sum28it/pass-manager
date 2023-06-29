@@ -10,6 +10,8 @@ import (
 	"os"
 )
 
+//CURRENT TASK: Refactor to support linux path names
+
 type User struct {
 	App         string `json:"app"`
 	UserId      string `json:"userid"`
