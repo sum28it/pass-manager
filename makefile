@@ -26,3 +26,8 @@ build-win-amd64:
 	set GOOS=windows
 	set GOARCH=amd64
 	go build -o bin/passm.exe
+
+build-linux-amd64:
+	set GOOS=linux
+	set GOARCH=amd64
+	go build -o bin/passm-linux-amd64.exe
