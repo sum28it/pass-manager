@@ -25,11 +25,11 @@ type User struct {
 var Dir string
 
 func init() {
-	Dir, _ = os.UserConfigDir()
+	Dir, _ = os.UserHomeDir()
 }
 
 const (
-	localDir string = "password-manager-data"
+	localDir string = ".password-manager-data"
 	dataFile string = "users.json"
 	envFile  string = "keys.env"
 )
