@@ -10,7 +10,7 @@ add:
 
 get:
 	pass-manager get secret
-	
+
 test:
 	pass-manager init "secret"
 	pass-manager init "secret"
@@ -53,3 +53,9 @@ build-all:
 	make build-win-arm
 	make build-linux-amd64
 	make build-linux-arm
+
+docker-build: 
+	docker build -t sum28it/pass-manager .
+
+docker-run:
+	docker run --name pass-manager -it sum28it/pass-manager

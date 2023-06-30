@@ -11,9 +11,9 @@ import (
 func Info() string {
 
 	if !auth.IsInit(filepath.Join(Dir, localDir, envFile)) {
-		return fmt.Sprintf("The app is not initialized. After initialization, the data will be stored at %s in %s", Dir, localDir)
+		return fmt.Sprintf("The app is not initialized. After initialization, the data will be stored at %s", filepath.Join(Dir, localDir))
 	}
 
-	return filepath.Join(Dir, localDir)
+	return fmt.Sprintf("Your application is initialized and the data is stored at %s", filepath.Join(Dir, localDir))
 
 }
