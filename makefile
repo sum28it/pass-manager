@@ -5,10 +5,12 @@ install:
 push:
 	git push -u origin main
 
-add: pass-manager add -a Leetcode -e prasad28sumit@gmail.com -u sum28it -p Something secret
+add:
+	pass-manager add -a Leetcode -e prasad28sumit@gmail.com -u sum28it -p Something secret
 
-delete: pass-manager 
-
+get:
+	pass-manager get secret
+	
 test:
 	pass-manager init "secret"
 	pass-manager init "secret"
