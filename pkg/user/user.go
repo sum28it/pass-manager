@@ -35,7 +35,7 @@ const (
 )
 
 func (u User) PrintLong() string {
-	return fmt.Sprintf("{\nApp: %s\nUserId: %s\nEmail: %s\nPassword: %s\nDescription: %s\nModifiedAt: %s\n}", u.App, u.UserId, u.Email, u.Password, u.Description, u.ModifiedAt)
+	return fmt.Sprintf("{\n\tApp: %s\n\tUserId: %s\n\tEmail: %s\n\tPassword: %s\n\tDescription: %s\n\tModifiedAt: %s\n}", u.App, u.UserId, u.Email, u.Password, u.Description, u.ModifiedAt)
 }
 
 func (u User) Print() string {

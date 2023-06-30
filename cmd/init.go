@@ -15,7 +15,7 @@ var initCmd = &cobra.Command{
 	Use:   "init",
 	Short: "Initializes the application",
 	Long: `init command is the first command to be run after installing the application.
-	It takes an argument which is the secret for accessing the appication.`,
+It takes an argument which is the secret for accessing the appication.`,
 	Args: cobra.ExactArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
 

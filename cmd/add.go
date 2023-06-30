@@ -26,11 +26,15 @@ the application`,
 			Password:    cmd.Flag("password").Value.String(),
 			Description: cmd.Flag("description").Value.String(),
 		}
-		err := user.Add(u, args[0])
+		users, err := user.Add(u, args[0])
 		if err != nil {
 			fmt.Println(err)
+			for _, u := range users {
+				fmt.Println(u.Print())
+			}
 			return
 		}
+
 		fmt.Println("User Added!")
 	},
 }

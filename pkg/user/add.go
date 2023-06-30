@@ -11,18 +11,29 @@ import (
 	"github.com/sum28it/pass-manager/pkg/auth"
 )
 
-func Add(user User, secret string) error {
+func Add(user User, secret string) ([]User, error) {
 
 	if err := auth.Authenticate(secret, filepath.Join(Dir, localDir, envFile)); err != nil {
-		return err
+		return nil, err
 	}
 
 	var users []User
 	users, err := read(os.O_RDWR)
 	if err != nil {
 		if errors.Is(err, io.EOF) {
-			return errors.New("error reading file")
+			return nil, errors.New("error reading file")
 		}
+	}
+
+	var matched []User
+	for _, val := range users {
+		if user.match(val) {
+			matched = append(matched, val)
+		}
+	}
+
+	if len(matched) != 0 {
+		return matched, errors.New("User already exists")
 	}
 
 	// Encryption Here
@@ -30,7 +41,7 @@ func Add(user User, secret string) error {
 
 	if err != nil {
 		fmt.Println(err)
-		return errors.New("error encrypting password")
+		return nil, errors.New("error encrypting password")
 	}
 
 	now := time.Now().Format("2006-01-02 15:04:05")
@@ -38,7 +49,7 @@ func Add(user User, secret string) error {
 	users = append(users, user)
 	err = write(users)
 	if err != nil {
-		return err
+		return nil, err
 	}
-	return nil
+	return nil, nil
 }

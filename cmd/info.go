@@ -16,7 +16,8 @@ var infoCmd = &cobra.Command{
 	Short: "Prints the location of data files",
 	Long:  `This command is used to know about the location of the genereted data stored on the machine`,
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println(user.Info())
+		path := user.Info()
+		fmt.Printf("Your application is initialized and the data is stored at %s\n", path)
 	},
 }
 

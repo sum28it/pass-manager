@@ -16,7 +16,7 @@ var deleteCmd = &cobra.Command{
 	Use:   "delete",
 	Short: "Deletes one or more user data",
 	Long: `This command is for deleting one or more app data. It takes an argument secret and has flags for specifying 
-	the app data to be deleted`,
+the app data to be deleted`,
 	Args: cobra.ExactArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
 

@@ -34,7 +34,7 @@ WARNING: [All your data will be lost]`,
 			}
 			fmt.Println("Your application has been successsfully reset.\nUse init command again before adding users.")
 		default:
-			fmt.Println("Invalid Input!")
+			fmt.Println("Your data is safe!")
 		}
 	},
 }
