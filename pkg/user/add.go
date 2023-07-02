@@ -2,7 +2,6 @@ package user
 
 import (
 	"errors"
-	"fmt"
 	"io"
 	"os"
 	"path/filepath"
@@ -40,7 +39,6 @@ func Add(user User, secret string) ([]User, error) {
 	user.Password, err = encrypt(secret, user.Password)
 
 	if err != nil {
-		fmt.Println(err)
 		return nil, errors.New("error encrypting password")
 	}
 

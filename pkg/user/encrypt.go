@@ -3,6 +3,7 @@ package user
 import (
 	"crypto/aes"
 	"crypto/cipher"
+	"crypto/rand"
 	"crypto/sha256"
 	"encoding/hex"
 	"errors"
@@ -30,21 +31,29 @@ func encrypt(secret string, text string) (string, error) {
 	// Create a new AES block cipher
 	block, err := aes.NewCipher(key)
 	if err != nil {
-		panic(err)
+		return "", err
 	}
 
 	// Create a new GCM (Galois/Counter Mode) instance
 	gcm, err := cipher.NewGCM(block)
 	if err != nil {
-		panic(err)
+		return "", err
 	}
 
 	// Create a nonce
 	nonce := make([]byte, gcm.NonceSize())
+	_, err = rand.Read(nonce)
+	if err != nil {
+		return "", err
+	}
 
 	// Encrypt the plaintext
 	ciphertext := gcm.Seal(nil, nonce, []byte(text), nil)
 
+	// prepend the cipherTextwith nonce
+	ciphertext = append(nonce, ciphertext...)
+
+	// Return the hex encoded string for ciphertext
 	return hex.EncodeToString(ciphertext), nil
 
 }
