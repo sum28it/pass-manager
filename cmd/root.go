@@ -4,10 +4,13 @@ Copyright © 2023 sum28it prasad28sumit@gmail.com
 package cmd
 
 import (
+	"fmt"
 	"os"
 
 	"github.com/spf13/cobra"
 )
+
+var CommitId string
 
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
@@ -17,7 +20,9 @@ var rootCmd = &cobra.Command{
 are encrypted and stored on your machine. There is no internet connectivity required.`,
 	// Uncomment the following line if your bare application
 	// has an action associated with it:
-	// Run: func(cmd *cobra.Command, args []string) { },
+	Run: func(cmd *cobra.Command, args []string) {
+		fmt.Println("This application is built from commit ID:", CommitId)
+	},
 }
 
 // Execute adds all child commands to the root command and sets flags appropriately.

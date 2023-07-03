@@ -1,6 +1,6 @@
 install:
-	set CGO_ENABLED=0 
-	go install .
+	set CGO_ENABLED=0
+	go install -ldflags "-X github.com/sum28it/pass-manager/cmd.CommitId=${shell git rev-parse HEAD}" .
 
 tidy:
 	go mod tidy	
@@ -32,25 +32,25 @@ build-win-amd64:
 	set CGO_ENABLED=0 
 	set GOOS=windows
 	set GOARCH=amd64
-	go build -o bin/passm-win-amd64.exe
+	go build -o bin/passm-win-amd64.exe -ldflags "-X github.com/sum28it/pass-manager/cmd.CommitId=$(shell git rev-parse HEAD)"
 
 build-linux-amd64:
 	set CGO_ENABLED=0
 	set GOOS=linux
 	set GOARCH=amd64
-	go build -o bin/passm-linux-amd64.exe
+	go build -o bin/passm-linux-amd64.exe -ldflags "-X github.com/sum28it/pass-manager/cmd.CommitId=$(shell git rev-parse HEAD)"
 
 build-win-arm:
 	set CGO_ENABLED=0 
 	set GOOS=windows
 	set GOARCH=arm
-	go build -o bin/passm-win-arm.exe
+	go build -o bin/passm-win-arm.exe -ldflags "-X github.com/sum28it/pass-manager/cmd.CommitId=$(shell git rev-parse HEAD)"
 
 build-linux-arm:
 	set CGO_ENABLED=0 
 	set GOOS=linux
 	set GOARCH=arm
-	go build -o bin/passm-linux-arm.exe
+	go build -o bin/passm-linux-arm.exe -ldflags "-X github.com/sum28it/pass-manager/cmd.CommitId=$(shell git rev-parse HEAD)"
 
 build-all:
 	make build-win-amd64
