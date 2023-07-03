@@ -5,9 +5,11 @@ package cmd
 
 import (
 	"fmt"
+	"os"
 
 	"github.com/spf13/cobra"
 	"github.com/sum28it/pass-manager/pkg/user"
+	"golang.org/x/term"
 )
 
 // getCmd represents the get command
@@ -16,17 +18,23 @@ var getCmd = &cobra.Command{
 	Short: "Retrieve user data",
 	Long: `This command is used to retrieve app data. It takes an argument secret and flags for specifying the 
 details of queried app.`,
-	Args: cobra.ExactArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
 		// value, _ := cmd.Flags().GetBool("long")
 		// fmt.Println("get called", value, args)
 
+		fmt.Print("Your secret: ")
+		secret, err := term.ReadPassword(int(os.Stdin.Fd()))
+		if err != nil {
+			fmt.Println("Error reading secret")
+			return
+		}
+		fmt.Println()
 		u := user.User{
 			App:    cmd.Flag("app").Value.String(),
 			Email:  cmd.Flag("email").Value.String(),
 			UserId: cmd.Flag("userId").Value.String(),
 		}
-		result, err := user.Get(u, args[0])
+		result, err := user.Get(u, string(secret))
 
 		if err != nil {
 			fmt.Println(err)

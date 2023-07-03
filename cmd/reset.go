@@ -5,10 +5,12 @@ package cmd
 
 import (
 	"fmt"
+	"os"
 	"strings"
 
 	"github.com/spf13/cobra"
 	"github.com/sum28it/pass-manager/pkg/user"
+	"golang.org/x/term"
 )
 
 // resetCmd represents the reset command
@@ -17,9 +19,15 @@ var resetCmd = &cobra.Command{
 	Short: "Resets the application",
 	Long: `This command resets the application and deletes all the app data. It takes the secret as an argument.
 WARNING: [All your data will be lost]`,
-	Args: cobra.ExactArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
 
+		fmt.Print("Your secret: ")
+		secret, err := term.ReadPassword(int(os.Stdin.Fd()))
+		if err != nil {
+			fmt.Println("Error reading secret")
+			return
+		}
+		fmt.Println()
 		var choice string
 		fmt.Println("This will remove all your data including any password that might be saved.\nAre you sure you want to do this? (Yes/No)")
 		fmt.Scanf("%s", &choice)
@@ -27,7 +35,7 @@ WARNING: [All your data will be lost]`,
 
 		switch choice {
 		case "YES":
-			err := user.Reset(args[0])
+			err := user.Reset(string(secret))
 			if err != nil {
 				fmt.Println(err)
 				return

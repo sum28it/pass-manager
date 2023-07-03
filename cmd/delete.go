@@ -5,10 +5,12 @@ package cmd
 
 import (
 	"fmt"
+	"os"
 	"strings"
 
 	"github.com/spf13/cobra"
 	"github.com/sum28it/pass-manager/pkg/user"
+	"golang.org/x/term"
 )
 
 // deleteCmd represents the delete command
@@ -17,16 +19,22 @@ var deleteCmd = &cobra.Command{
 	Short: "Deletes one or more user data",
 	Long: `This command is for deleting one or more app data. It takes an argument secret and has flags for specifying 
 the app data to be deleted`,
-	Args: cobra.ExactArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
 
+		fmt.Print("Your secret: ")
+		secret, err := term.ReadPassword(int(os.Stdin.Fd()))
+		if err != nil {
+			fmt.Println("Error reading secret")
+			return
+		}
+		fmt.Println()
 		u := user.User{
 			App:    cmd.Flag("app").Value.String(),
 			Email:  cmd.Flag("email").Value.String(),
 			UserId: cmd.Flag("userId").Value.String(),
 		}
 		var users []user.User
-		users, err := user.Delete(u, args[0], false)
+		users, err = user.Delete(u, string(secret), false)
 		if err != nil {
 			fmt.Println(err)
 			return

@@ -5,9 +5,11 @@ package cmd
 
 import (
 	"fmt"
+	"os"
 
 	"github.com/spf13/cobra"
 	"github.com/sum28it/pass-manager/pkg/user"
+	"golang.org/x/term"
 )
 
 // initCmd represents the init command
@@ -16,15 +18,24 @@ var initCmd = &cobra.Command{
 	Short: "Initializes the application",
 	Long: `init command is the first command to be run after installing the application.
 It takes an argument which is the secret for accessing the appication.`,
-	Args: cobra.ExactArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
 
-		dir, err := user.Init(args[0])
+		fmt.Print("Your secret: ")
+		secret, err := term.ReadPassword(int(os.Stdin.Fd()))
+		if err != nil {
+			fmt.Println("Error reading secret")
+			return
+		}
+
+		fmt.Println()
+		dir, err := user.Init(string(secret))
 		if err != nil {
 			fmt.Println(err)
-		} else {
-			fmt.Println("Data is stored at: ", dir)
+			return
 		}
+		fmt.Println("Keep your secret safe:", string(secret))
+		fmt.Println("Your data is stored at:", dir)
+
 	},
 }
 

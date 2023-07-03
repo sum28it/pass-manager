@@ -5,9 +5,12 @@ package cmd
 
 import (
 	"fmt"
+	"os"
+	"time"
 
 	"github.com/spf13/cobra"
 	"github.com/sum28it/pass-manager/pkg/user"
+	"golang.org/x/term"
 )
 
 // addCmd represents the add command
@@ -17,16 +20,32 @@ var addCmd = &cobra.Command{
 	Long: `This command is used to add a new user data. It has multiple flags, some of which 
 are required and others are optional. This command takes a mandatory argument i.e the secret for
 the application`,
-	Args: cobra.ExactArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
+
+		// Read password and secret from the terminal
+		fmt.Print("Enter password: ")
+		password, err := term.ReadPassword(int(os.Stdin.Fd()))
+		if err != nil {
+			fmt.Println("Error reading password")
+			return
+		}
+		fmt.Print("\nYour secret: ")
+		secret, err := term.ReadPassword(int(os.Stdin.Fd()))
+		if err != nil {
+			fmt.Println("Error reading secret")
+			return
+		}
+		fmt.Println()
+
 		u := user.User{
 			App:         cmd.Flag("app").Value.String(),
 			UserId:      cmd.Flag("userId").Value.String(),
 			Email:       cmd.Flag("email").Value.String(),
-			Password:    cmd.Flag("password").Value.String(),
+			Password:    string(password),
+			ModifiedAt:  time.Now().Format("2006-01-02 15:04:05"),
 			Description: cmd.Flag("description").Value.String(),
 		}
-		users, err := user.Add(u, args[0])
+		users, err := user.Add(u, string(secret))
 		if err != nil {
 			fmt.Println(err)
 			for _, u := range users {
@@ -36,6 +55,7 @@ the application`,
 		}
 
 		fmt.Println("User Added!")
+		fmt.Println(u.PrintLong())
 	},
 }
 
@@ -54,10 +74,8 @@ func init() {
 	addCmd.Flags().StringP("app", "a", "", "App name (required)")
 	addCmd.Flags().StringP("userId", "u", "", "User ID")
 	addCmd.Flags().StringP("email", "e", "", "Email")
-	addCmd.Flags().StringP("password", "p", "", "Password (required)")
 	addCmd.Flags().StringP("description", "d", "", "Description")
 
 	addCmd.MarkFlagRequired("app")
-	addCmd.MarkFlagRequired("password")
 
 }

@@ -17,7 +17,7 @@ var infoCmd = &cobra.Command{
 	Long:  `This command is used to know about the location of the genereted data stored on the machine`,
 	Run: func(cmd *cobra.Command, args []string) {
 		msg := user.Info()
-		fmt.Printf(msg)
+		fmt.Println(msg)
 	},
 }
 

@@ -2,27 +2,31 @@ install:
 	set CGO_ENABLED=0 
 	go install .
 
+tidy:
+	go mod tidy	
+	go mod vendor
+
 push:
 	git push -u origin main
 
 add:
-	pass-manager add -a Leetcode -e prasad28sumit@gmail.com -u sum28it -p Something secret
+	pass-manager add -a Leetcode -e prasad28sumit@gmail.com -u sum28it
 
 get:
-	pass-manager get secret
+	pass-manager get
 
 test:
-	pass-manager init "secret"
-	pass-manager init "secret"
-	pass-manager get -a Leetcode secret
-	pass-manager add -a Leetcode -e prasad28sumit@gmail.com -u sum28it -p Something secret
-	pass-manager add -a Github -e prasad28sumit@gmail.com -u sum28it -p Whatever secret
-	pass-manager get -a Leetcode secret
-	pass-manager delete -a Leetcode secret
-	pass-manager get -a Leetcode secret
+	pass-manager init 
+	pass-manager init 
+	pass-manager get -a Leetcode 
+	pass-manager add -a Leetcode -e prasad28sumit@gmail.com -u sum28it
+	pass-manager add -a Github -e prasad28sumit@gmail.com -u sum28it
+	pass-manager get -a Leetcode 
+	pass-manager delete -a Leetcode 
+	pass-manager get -a Leetcode 
 
 reset: 
-	pass-manager reset secret
+	pass-manager reset
 
 build-win-amd64:
 	set CGO_ENABLED=0 

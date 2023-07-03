@@ -5,7 +5,6 @@ import (
 	"io"
 	"os"
 	"path/filepath"
-	"time"
 
 	"github.com/sum28it/pass-manager/pkg/auth"
 )
@@ -42,8 +41,6 @@ func Add(user User, secret string) ([]User, error) {
 		return nil, errors.New("error encrypting password")
 	}
 
-	now := time.Now().Format("2006-01-02 15:04:05")
-	user.ModifiedAt = now
 	users = append(users, user)
 	err = write(users)
 	if err != nil {
