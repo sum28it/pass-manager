@@ -1,3 +1,6 @@
+build:
+	go build -o pass.exe .
+
 install:
 	set CGO_ENABLED=0
 	go install -ldflags "-X github.com/sum28it/pass-manager/cmd.CommitId=${shell git rev-parse HEAD}" .
