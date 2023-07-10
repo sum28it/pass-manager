@@ -26,14 +26,25 @@ It takes an argument which is the secret for accessing the appication.`,
 			fmt.Println("Error reading secret")
 			return
 		}
-
 		fmt.Println()
+		fmt.Print("Confirm secret: ")
+		retypedSecret, err := term.ReadPassword(int(os.Stdin.Fd()))
+		if err != nil {
+			fmt.Println("Error reading secret")
+			return
+		}
+		fmt.Println()
+
+		if string(secret) != string(retypedSecret) {
+			fmt.Println("Secrets doesn't match")
+			return
+		}
+
 		dir, err := user.Init(string(secret))
 		if err != nil {
 			fmt.Println(err)
 			return
 		}
-		fmt.Println("Keep your secret safe:", string(secret))
 		fmt.Println("Your data is stored at:", dir)
 
 	},
