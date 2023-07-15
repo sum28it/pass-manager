@@ -31,7 +31,7 @@ var resetSecretCmd = &cobra.Command{
 		}
 		fmt.Println()
 
-		fmt.Print("Your secret: ")
+		fmt.Print("New secret: ")
 		newSecret, err := term.ReadPassword(int(os.Stdin.Fd()))
 		if err != nil {
 			fmt.Println("Error reading secret")
@@ -39,7 +39,7 @@ var resetSecretCmd = &cobra.Command{
 		}
 		fmt.Println()
 
-		fmt.Print("Your secret: ")
+		fmt.Print("Re-enter secret: ")
 		reEnteredSecret, err := term.ReadPassword(int(os.Stdin.Fd()))
 		if err != nil {
 			fmt.Println("Error reading secret")
@@ -59,7 +59,7 @@ var resetSecretCmd = &cobra.Command{
 			return
 		}
 
-		fmt.Println("Your secret has been succesfully changed")
+		fmt.Println("Your secret has been changed succesfully!")
 
 	},
 }
