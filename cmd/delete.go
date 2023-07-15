@@ -48,7 +48,7 @@ the app data to be deleted`,
 			fmt.Scanf("%s", &choice)
 			choice = strings.ToUpper(choice)
 			if choice == "YES" {
-				user.Delete(u, args[0], true)
+				user.Delete(u, string(secret), true)
 			}
 		}
 		fmt.Println("Deleted!")

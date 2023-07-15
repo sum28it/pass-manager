@@ -9,6 +9,8 @@ import (
 	"io"
 	"os"
 	"path/filepath"
+
+	"github.com/sum28it/pass-manager/pkg/auth"
 )
 
 //CURRENT TASK: Refactor to support linux path names
@@ -103,4 +105,9 @@ func (u *User) match(user User) bool {
 	}
 
 	return true
+}
+
+// Wrapper function for auth.IsInit
+func IsInit() bool {
+	return auth.IsInit(Dir + localDir + envFile)
 }
